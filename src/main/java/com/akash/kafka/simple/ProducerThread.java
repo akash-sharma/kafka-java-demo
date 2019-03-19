@@ -12,7 +12,10 @@ public class ProducerThread implements Runnable {
 
     private Producer<String, String> producer;
 
-    public ProducerThread() {
+    private String topicName;
+
+    public ProducerThread(String topicName) {
+        this.topicName = topicName;
         Properties props = new Properties();
         props.put("bootstrap.servers", "localhost:9092");
         props.put("acks", "all");
@@ -23,8 +26,8 @@ public class ProducerThread implements Runnable {
 
     @Override
     public void run() {
-        for (int index = 0; index < 1000; index++) {
-            final ProducerRecord<String, String> record = new ProducerRecord<String, String>("my-topic",
+        for (int index = 1; index < 100; index++) {
+            final ProducerRecord<String, String> record = new ProducerRecord<>(topicName,
                     Integer.toString(index), Integer.toString(index));
             try {
                 RecordMetadata metadata = producer.send(record).get();
