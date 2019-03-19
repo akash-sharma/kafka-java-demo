@@ -11,13 +11,12 @@ import java.util.concurrent.ExecutionException;
 public class ProducerThread implements Runnable {
 
     private Producer<String, String> producer;
-
     private String topicName;
 
-    public ProducerThread(String topicName) {
-        this.topicName = topicName;
+    public ProducerThread(Application application) {
+        this.topicName = application.getTopicName();
         Properties props = new Properties();
-        props.put("bootstrap.servers", "localhost:9092");
+        props.put("bootstrap.servers", application.getBrokerUrl());
         props.put("acks", "all");
         props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
