@@ -42,3 +42,7 @@ public class ProducerThread implements Runnable {
         }
     }
 }
+
+/**
+ * default value of "auto.create.topics.enable" is true in kafka broker
+ */
