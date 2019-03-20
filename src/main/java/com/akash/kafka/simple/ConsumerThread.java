@@ -28,17 +28,18 @@ public class ConsumerThread implements Runnable {
 
     @Override
     public void run() {
+        String threadName = Thread.currentThread().getName();
         int noMessageToFetch = 1;
         while (noMessageToFetch < 3) {
-            System.out.println("poll start..");
+            System.out.println(threadName + "poll start..");
             final ConsumerRecords<String, String> consumerRecords = consumer.poll(Duration.ofSeconds(1));
-            System.out.println("records polled : "+consumerRecords.count());
+            System.out.println(threadName + "records polled : "+consumerRecords.count());
             if (consumerRecords.count() == 0) {
                 noMessageToFetch++;
                 continue;
             }
             for (ConsumerRecord<String, String> record : consumerRecords) {
-                System.out.printf("offset = %d, key = %s, value = %s, partition =%d%n",
+                System.out.printf(threadName + "offset = %d, key = %s, value = %s, partition =%d%n",
                         record.offset(), record.key(), record.value(), record.partition());
             }
             consumer.commitAsync();

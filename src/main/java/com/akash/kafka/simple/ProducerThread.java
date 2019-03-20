@@ -25,18 +25,22 @@ public class ProducerThread implements Runnable {
 
     @Override
     public void run() {
+        String threadName = Thread.currentThread().getName();
         for (int index = 1; index < 100; index++) {
             final ProducerRecord<String, String> record = new ProducerRecord<>(topicName,
                     Integer.toString(index), Integer.toString(index));
             try {
                 RecordMetadata metadata = producer.send(record).get();
-                System.out.println("Record sent with key " + index + " to partition " + metadata.partition()
+                System.out.println(threadName + "Record sent with key " + index + " to partition " + metadata.partition()
                         + " with offset " + metadata.offset());
             } catch (ExecutionException e) {
-                System.out.println("Error in sending record :"+e);
+                System.out.println(threadName + "Error in sending record :"+e);
                 throw new RuntimeException(e);
             } catch (InterruptedException e) {
-                System.out.println("Error in sending record : "+e);
+                System.out.println(threadName + "Error in sending record : "+e);
+                throw new RuntimeException(e);
+            } catch (Exception e) {
+                System.out.println(threadName + "Error in sending record : "+e);
                 throw new RuntimeException(e);
             }
         }
